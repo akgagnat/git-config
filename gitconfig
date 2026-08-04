@@ -1,0 +1,42 @@
+# Shared, portable Git preferences.
+# Keep identity, signing, credentials, and other machine-specific settings in
+# ~/.config/git-config/local.gitconfig instead.
+
+[include]
+	path = ~/.config/git-config/local.gitconfig
+
+[alias]
+	st = status -sb
+	ci = commit
+	co = checkout
+	br = branch
+	lg = log --graph --decorate --oneline
+	last = log -1 HEAD
+	unstage = restore --staged
+
+[commit]
+	verbose = true
+
+[diff]
+	algorithm = histogram
+
+[fetch]
+	prune = true
+
+[init]
+	defaultBranch = main
+
+[merge]
+	conflictStyle = zdiff3
+
+[pull]
+	ff = only
+
+[push]
+	autoSetupRemote = true
+
+[rebase]
+	autoStash = true
+
+[rerere]
+	enabled = true

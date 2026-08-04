@@ -1,0 +1,4 @@
+# Never keep machine-specific Git configuration or key material in this repository.
+gitconfig.local
+*.key
+*.pem

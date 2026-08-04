@@ -1,0 +1,15 @@
+# This file is copied to ~/.config/git-config/local.gitconfig by install.sh.
+# It remains outside the repository and is intentionally never committed.
+
+[user]
+	name = Your Name
+	email = you@example.com
+
+# Optional signing configuration. Uncomment and set values appropriate to this
+# machine; never store private keys in this repository.
+#
+# [commit]
+# 	gpgSign = true
+#
+# [user]
+# 	signingKey = YOUR_PUBLIC_KEY_FINGERPRINT
