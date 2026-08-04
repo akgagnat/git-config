@@ -1,9 +1,11 @@
 # Shared, portable Git preferences.
 # Keep identity, signing, credentials, and other machine-specific settings in
-# ~/.config/git-config/local.gitconfig instead.
+# local.gitconfig instead.
 
+# Relative include paths resolve against the directory of the file holding the
+# include, so this follows the installed symlink and honours XDG_CONFIG_HOME.
 [include]
-	path = ~/.config/git-config/local.gitconfig
+	path = local.gitconfig
 
 [alias]
 	st = status -sb
@@ -11,17 +13,31 @@
 	co = checkout
 	br = branch
 	lg = log --graph --decorate --oneline
+	lga = log --graph --decorate --oneline --all
 	last = log -1 HEAD
 	unstage = restore --staged
+
+[branch]
+	sort = -committerdate
+
+[column]
+	ui = auto
 
 [commit]
 	verbose = true
 
 [diff]
 	algorithm = histogram
+	colorMoved = zebra
+	mnemonicPrefix = true
+	renames = true
 
 [fetch]
 	prune = true
+	fsckObjects = true
+
+[help]
+	autocorrect = prompt
 
 [init]
 	defaultBranch = main
@@ -34,9 +50,27 @@
 
 [push]
 	autoSetupRemote = true
+	followTags = true
 
 [rebase]
 	autoStash = true
+	autoSquash = true
+	updateRefs = true
+
+[receive]
+	fsckObjects = true
 
 [rerere]
 	enabled = true
+
+[tag]
+	sort = version:refname
+
+[transfer]
+	fsckObjects = true
+
+# Refuse to guess an identity from the hostname and login name. Without this,
+# Git silently authors commits as e.g. user@hostname when local.gitconfig has
+# no user.name/user.email set.
+[user]
+	useConfigOnly = true
