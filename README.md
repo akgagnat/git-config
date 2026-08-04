@@ -14,15 +14,29 @@ Clone this repository, then run:
 
 The installer:
 
-1. Symlinks the tracked config to `~/.config/git-config/shared.gitconfig`.
+1. Symlinks the tracked config to `<config dir>/shared.gitconfig`, where
+   `<config dir>` is `${XDG_CONFIG_HOME:-~/.config}/git-config`.
 2. Adds that stable path as a global Git include without replacing existing
    global configuration.
-3. Creates `~/.config/git-config/local.gitconfig` from
+3. Creates `<config dir>/local.gitconfig` from
    [`local.gitconfig.example`](local.gitconfig.example), with owner-only
    permissions, if it does not already exist.
 
-Set your name and email in the local file. Its values override the shared
-configuration and are not tracked by this repository.
+The shared config includes `local.gitconfig` by relative path, so it resolves
+next to the symlink and follows `XDG_CONFIG_HOME` automatically.
+
+Set your name and email in the local file; they are commented out by default.
+Because the shared config sets `user.useConfigOnly`, Git refuses to commit
+until you do, rather than guessing an identity from your hostname and login
+name. Local values override the shared configuration and are not tracked by
+this repository.
+
+To remove the global include and the symlink, keeping your local identity
+file:
+
+```bash
+./install.sh --uninstall
+```
 
 ## Sensitive values
 
@@ -44,6 +58,15 @@ git config --show-origin --list
 
 The shared configuration uses `main` for new repositories, prunes deleted
 remote branches, requires fast-forward pulls, enables rerere, uses `zdiff3`
-conflict markers, and supplies compact status/log aliases. It intentionally
-does not set an editor, credential helper, signing key, or identity because
-those are machine- or person-specific.
+conflict markers, and supplies compact status/log aliases. It also sorts
+branches by recency and tags by version, enables rebase `autoSquash` and
+`updateRefs` for stacked branches, pushes tags alongside commits, and turns on
+`fsckObjects` for fetch, receive, and transfer so malformed or malicious
+objects are rejected.
+
+It intentionally does not set an editor, credential helper, signing key, or
+identity because those are machine- or person-specific.
+
+## License
+
+[MIT](LICENSE)
