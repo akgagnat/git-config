@@ -67,8 +67,8 @@ ln -sfn -- "$repo_dir/gitconfig" "$shared_config"
 if [[ ! -e $local_config ]]; then
 	umask 077
 	cp -- "$repo_dir/local.gitconfig.example" "$local_config"
-	chmod 600 -- "$local_config"
-	printf 'Created %s; set your name and email before committing.\n' "$local_config"
+	chmod 600 "$local_config"
+	printf 'Created %s. Edit it to set your name and email before committing.\n' "$local_config"
 fi
 
 if ! has_global_include; then
