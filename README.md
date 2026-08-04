@@ -62,7 +62,8 @@ conflict markers, and supplies compact status/log aliases. It also sorts
 branches by recency and tags by version, enables rebase `autoSquash` and
 `updateRefs` for stacked branches, pushes tags alongside commits, and turns on
 `fsckObjects` for fetch, receive, and transfer so malformed or malicious
-objects are rejected.
+objects are rejected. `git log` uses a colored format with abbreviated commit
+hash, decorations, subject, relative time, and author.
 
 It intentionally does not set an editor, credential helper, signing key, or
 identity because those are machine- or person-specific.

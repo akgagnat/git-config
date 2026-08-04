@@ -8,9 +8,11 @@
 	path = local.gitconfig
 
 [alias]
-	st = status -sb
+	st = status
+	bl = branch -a
 	ci = commit
 	co = checkout
+	cp = cherry-pick
 	br = branch
 	lg = log --graph --decorate --oneline
 	lga = log --graph --decorate --oneline --all
@@ -35,6 +37,9 @@
 [fetch]
 	prune = true
 	fsckObjects = true
+
+[format]
+	pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
 
 [help]
 	autocorrect = prompt
