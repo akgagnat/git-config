@@ -1,12 +1,10 @@
 # This file is copied to ~/.config/git-config/local.gitconfig by install.sh.
 # It remains outside the repository and is intentionally never committed.
 
-# Set your identity here. The values stay commented out on purpose: Git should
-# refuse to commit until you supply a real name and email rather than silently
-# authoring commits as a placeholder.
+# Your identity. install.sh fills these in from the values you enter, or from
+# --name/--email. They stay unset until you supply real ones, so that Git
+# refuses to commit rather than silently authoring commits as a placeholder.
 [user]
-#	name = Your Name
-#	email = you@example.com
 
 # Optional signing configuration. Uncomment and set values appropriate to this
 # machine; never store private keys in this repository.

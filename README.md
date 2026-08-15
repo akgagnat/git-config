@@ -6,37 +6,88 @@ signing preferences, credentials, and private keys stay outside this repository.
 
 ## Install
 
-Clone this repository, then run:
+On a new machine, with nothing checked out yet:
 
-```bash
+```sh
+curl -fsSL https://raw.githubusercontent.com/akgagnat/git-config/main/install.sh | sh
+```
+
+The installer asks for the name and email to use for commits on this machine.
+It reads the answers from the terminal, not from standard input, so prompting
+works even when the script itself arrives on the pipe.
+
+Or, from a checkout:
+
+```sh
 ./install.sh
 ```
 
 The installer:
 
-1. Symlinks the tracked config to `<config dir>/shared.gitconfig`, where
+1. Clones this repository to `${XDG_DATA_HOME:-~/.local/share}/git-config` when
+   run outside a checkout, and fast-forwards that clone on later runs. Run from
+   a checkout, it uses that checkout instead and clones nothing.
+2. Symlinks the tracked config to `<config dir>/shared.gitconfig`, where
    `<config dir>` is `${XDG_CONFIG_HOME:-~/.config}/git-config`.
-2. Adds that stable path as a global Git include without replacing existing
+3. Adds that stable path as a global Git include without replacing existing
    global configuration.
-3. Creates `<config dir>/local.gitconfig` from
+4. Creates `<config dir>/local.gitconfig` from
    [`local.gitconfig.example`](local.gitconfig.example), with owner-only
-   permissions, if it does not already exist.
+   permissions, if it does not already exist, and writes the identity into it.
 
 The shared config includes `local.gitconfig` by relative path, so it resolves
-next to the symlink and follows `XDG_CONFIG_HOME` automatically.
+next to the symlink and follows `XDG_CONFIG_HOME` automatically. Local values
+override the shared configuration and are not tracked by this repository.
 
-Set your name and email in the local file; they are commented out by default.
-Because the shared config sets `user.useConfigOnly`, Git refuses to commit
-until you do, rather than guessing an identity from your hostname and login
-name. Local values override the shared configuration and are not tracked by
-this repository.
+Rerunning the installer is safe: the include is added once, and an existing
+`local.gitconfig` is updated in place rather than replaced.
 
-To remove the global include and the symlink, keeping your local identity
-file:
+### Options
 
-```bash
+```
+--name NAME      Use NAME as user.name instead of asking.
+--email EMAIL    Use EMAIL as user.email instead of asking.
+--no-prompt      Never ask; keep whatever identity is already configured.
+--ref REF        Branch or tag to clone when bootstrapping (default: main).
+--uninstall      Remove the global include and the shared symlink.
+```
+
+`GIT_CONFIG_NAME`, `GIT_CONFIG_EMAIL`, `GIT_CONFIG_REPO_URL`,
+`GIT_CONFIG_REPO_REF`, and `GIT_CONFIG_CLONE_DIR` set the same values from the
+environment. Pass options through the pipe after `-s --`:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/akgagnat/git-config/main/install.sh |
+	sh -s -- --name 'Your Name' --email you@example.com
+```
+
+Without a terminal and without those values — in CI, say — the installer skips
+the prompt, finishes the rest of the setup, and prints the commands to set the
+identity later. Because the shared config sets `user.useConfigOnly`, Git
+refuses to commit until an identity exists, rather than guessing one from your
+hostname and login name.
+
+To remove the global include and the symlink, keeping your local identity file
+and the clone:
+
+```sh
 ./install.sh --uninstall
 ```
+
+### Piping to a shell
+
+`curl … | sh` runs whatever the server returns. That is worth doing only for a
+repository you control and over HTTPS, as above. To read the script first:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/akgagnat/git-config/main/install.sh -o install.sh
+less install.sh
+sh install.sh
+```
+
+The raw URL serves the public repository without authentication. If the
+repository is made private, the URL stops working for `curl`; clone it over SSH
+and run `./install.sh` from the checkout instead.
 
 ## Sensitive values
 
